@@ -1,0 +1,3 @@
+C:/Users/elhad/OneDrive/Attachments/Bureau/inf1015/tp2/out/build/x64-Debug/CMakeFiles/ProjetTD2.dir
+C:/Users/elhad/OneDrive/Attachments/Bureau/inf1015/tp2/out/build/x64-Debug/CMakeFiles/edit_cache.dir
+C:/Users/elhad/OneDrive/Attachments/Bureau/inf1015/tp2/out/build/x64-Debug/CMakeFiles/rebuild_cache.dir
