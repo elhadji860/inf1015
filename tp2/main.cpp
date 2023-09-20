@@ -48,7 +48,7 @@ gsl::span<Designer*> spanListeDesigners(const ListeDesigners& liste)
 // un des jeux de la ListeJeux. En cas contraire, elle renvoie un pointeur nul.
 
 
-Designer* lireDesigner(istream& fichier)
+Designer* lireDesigner(istream& fichier, ListeJeux listedejeux)
 {
 	Designer designer = {}; // On initialise une structure vide de type Designer.
 	designer.nom = lireString(fichier);
@@ -56,13 +56,19 @@ Designer* lireDesigner(istream& fichier)
 	designer.pays = lireString(fichier);
 	// Rendu ici, les champs précédents de la structure designer sont remplis
 	// avec la bonne information.
-
+	bool estDanslaliste = false;
+	for (int i = 0; i < listedejeux.nElements; ++i) {
+		Jeu* elements = *(listedejeux.elements);
+		Jeu jeu = elements[i];
+	}
 	//TODO: Ajouter en mémoire le designer lu. Il faut revoyer le pointeur créé.
 	// Attention, valider si le designer existe déjà avant de le créer, sinon
 	// on va avoir des doublons car plusieurs jeux ont des designers en commun
 	// dans le fichier binaire. Pour ce faire, cette fonction aura besoin de
 	// la liste de jeux principale en paramètre.
 	// Afficher un message lorsque l'allocation du designer est réussie.
+
+
 	cout << designer.nom << endl;  //TODO: Enlever cet affichage temporaire servant à voir que le code fourni lit bien les jeux.
 	return {}; //TODO: Retourner le pointeur vers le designer crée.
 }
