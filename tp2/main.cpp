@@ -1,4 +1,4 @@
-﻿#include "Jeu.hpp"
+#include "Jeu.hpp"
 #include <iostream>
 #include <fstream>
 #include "cppitertools/range.hpp"
@@ -47,8 +47,33 @@ gsl::span<Designer*> spanListeDesigners(const ListeDesigners& liste)
 // Cette fonction renvoie le pointeur vers le designer si elle le trouve dans
 // un des jeux de la ListeJeux. En cas contraire, elle renvoie un pointeur nul.
 
+bool estDansLaListe(Designer designer,ListeJeux listeJeux){
+	bool result = false;
+	Jeu * element = *(listeJeux.elements);
+	for (int i = 0; i < listeJeux.nElements; ++i) {
+		ListeDesigners listeDesigner = element[i].designers;
+		Designer* designers = *(listeDesigner.elements);
+		for (int j = 0; j < listeDesigner.nElements; ++j) {
+			if (designers[j].nom == designer.nom) {
+				result = true;
+			}
+		}
+	}
+	return result;
+}
 
-Designer* lireDesigner(istream& fichier, ListeJeux listedejeux)
+Designer* trouverDesigner(ListeJeux listeJeux,Designer designer) {
+	
+
+	if (estDansLaListe(designer,listeJeux)) {
+		return &designer;
+	}
+	else {
+		return nullptr;
+	}
+}
+
+Designer* lireDesigner(istream& fichier,ListeJeux listeJeuxPrincipale)
 {
 	Designer designer = {}; // On initialise une structure vide de type Designer.
 	designer.nom = lireString(fichier);
@@ -56,21 +81,24 @@ Designer* lireDesigner(istream& fichier, ListeJeux listedejeux)
 	designer.pays = lireString(fichier);
 	// Rendu ici, les champs précédents de la structure designer sont remplis
 	// avec la bonne information.
-	bool estDanslaliste = false;
-	for (int i = 0; i < listedejeux.nElements; ++i) {
-		Jeu* elements = *(listedejeux.elements);
-		Jeu jeu = elements[i];
-	}
+	// 
 	//TODO: Ajouter en mémoire le designer lu. Il faut revoyer le pointeur créé.
 	// Attention, valider si le designer existe déjà avant de le créer, sinon
 	// on va avoir des doublons car plusieurs jeux ont des designers en commun
 	// dans le fichier binaire. Pour ce faire, cette fonction aura besoin de
 	// la liste de jeux principale en paramètre.
+	Designer* ptrDesigner = nullptr;
+	if (estDansLaListe(designer,listeJeuxPrincipale)) {
+		ptrDesigner = new Designer;
+		ptrDesigner -> nom = designer.nom;
+		ptrDesigner -> anneeNaissance = designer.anneeNaissance;
+		ptrDesigner -> pays = designer.pays;
+		ptrDesigner->listeJeuxParticipes = designer.listeJeuxParticipes;
+		cout << "l'allocation du designer est réussie." << endl;
+	}
 	// Afficher un message lorsque l'allocation du designer est réussie.
-
-
 	cout << designer.nom << endl;  //TODO: Enlever cet affichage temporaire servant à voir que le code fourni lit bien les jeux.
-	return {}; //TODO: Retourner le pointeur vers le designer crée.
+	return ptrDesigner; //TODO: Retourner le pointeur vers le designer crée.
 }
 
 //TODO: Fonction qui change la taille du tableau de jeux de ListeJeux.
