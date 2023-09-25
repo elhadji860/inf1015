@@ -106,13 +106,25 @@ Designer* lireDesigner(istream& fichier,ListeJeux listeJeuxPrincipale)
 // tableau. Il faut allouer un nouveau tableau assez grand, copier ce qu'il y
 // avait dans l'ancien, et éliminer l'ancien trop petit. N'oubliez pas, on copie
 // des pointeurs de jeux. Il n'y a donc aucune nouvelle allocation de jeu ici !
+void changementDeTaille(ListeJeux& listeJeux, int facteur) {
+	Jeu** nouveauTableau;
+	Jeu** element = listeJeux.elements;
+	nouveauTableau = new Jeu * [(listeJeux.nElements) * facteur];
 
+	for (int i = 0; i < listeJeux.nElements; ++i) {
+			nouveauTableau[i] = element[i];
+	}
+	delete[] listeJeux.elements;
+	listeJeux.elements = nouveauTableau;
+}
 //TODO: Fonction pour ajouter un Jeu à ListeJeux.
 // Le jeu existant déjà en mémoire, on veut uniquement ajouter le pointeur vers
 // le jeu existant. De plus, en cas de saturation du tableau elements, cette
 // fonction doit doubler la taille du tableau elements de ListeJeux.
 // Utilisez la fonction pour changer la taille du tableau écrite plus haut.
+void ajouterJeux(Jeu jeu, ListeJeux& listejeux) {
 
+}
 //TODO: Fonction qui enlève un jeu de ListeJeux.
 // Attention, ici il n'a pas de désallocation de mémoire. Elle enlève le
 // pointeur de la ListeJeux, mais le jeu pointé existe encore en mémoire.
