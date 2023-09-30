@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include <string>
 #include "ListeDesigners.hpp"
 
@@ -8,4 +8,5 @@ struct Jeu
 	unsigned int anneeSortie;
 	std::string developpeur;
 	ListeDesigners designers;
+	ListeDesigners* ptrdesigner;
 };
