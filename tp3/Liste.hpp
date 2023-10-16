@@ -4,25 +4,41 @@
 #include <cassert>
 #include "gsl/span"
 #include "cppitertools/range.hpp"
-
+using namespace std;
 template <typename T>
 class Liste
 {
 public:
-	//TODO: Constructeurs et surcharges d'opérateurs
+	//TODO: Constructeurs et surcharges d'opÃ©rateurs
+	Liste() {
+		nElements_ = 0;
+		capacite_ = 1;
+		elements_ = nullptr;
+	}
+	Liste(unsigned nElement, unsigned capacite, unique_ptr<shared_ptr<T>[]> elements) {
+		nElements_ = nElement;
+		capacite_ = capacite;
+		elements_ = elements;
 
-	//TODO: Méthode pour ajouter un élément à la liste
-
-	// Pour size, on utilise le même nom que les accesseurs de la bibliothèque standard, qui permet d'utiliser certaines fonctions de la bibliotheque sur cette classe.
+	}
+	//TODO: MÃ©thode pour ajouter un Ã©lÃ©ment Ã  la liste
+	void ajouterElement(shared_ptr<T>element) {
+		elements_[nElements_] = element;
+		++nElements_;
+	}
+	// Pour size, on utilise le mÃªme nom que les accesseurs de la bibliothÃ¨que standard, qui permet d'utiliser certaines fonctions de la bibliotheque sur cette classe.
 	unsigned size() const         { return nElements_; }
 	unsigned getCapacite() const  { return capacite_; }
 
-	//TODO: Méthode pour changer la capacité de la liste
-
-	//TODO: Méthode pour trouver une élément selon un critère (lambda).
+	//TODO: MÃ©thode pour changer la capacitÃ© de la liste
+	void changerCapacite(int facteur) {
+		capacite_ *= facteur;
+	}
+	//TODO: MÃ©thode pour trouver une Ã©lÃ©ment selon un critÃ¨re (lambda).
 
 private:
 	unsigned nElements_;
 	unsigned capacite_;
-	//TODO: Attribut contenant les éléments de la liste.
+	unique_ptr<shared_ptr<T>[]> elements_;
+	//TODO: Attribut contenant les Ã©lÃ©ments de la liste.
 };
