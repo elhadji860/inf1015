@@ -2,6 +2,7 @@
 #include "lectureFichierJeux.hpp"
 #include <fstream>
 #include "cppitertools/range.hpp"
+#include "Liste.hpp"
 using namespace std;
 
 #pragma region "Fonctions de lecture de base"
@@ -54,9 +55,13 @@ shared_ptr<Jeu> lireJeu(istream& f, Liste<Jeu>& lj)
 	//TODO: Compléter la fonction (équivalent de lireJeu du TD2).
 	for (unsigned int i = 0; i < nConcepteurs; i++)
 		lireConcepteur(lj, f);
-
+	shared_ptr<Jeu> jeu;
+	jeu->setTitre(titre);
+	jeu->setAnneeSortie(anneeSortie);
+	jeu->setDeveloppeur(developpeur);
+	lj.ajouterElement(jeu);
 	cout << "J: " << titre << endl;  //TODO: Enlever cet affichage temporaire servant à voir que le code fourni lit bien les jeux.
-	return {};
+	return jeu;
 }
 
 Liste<Jeu> creerListeJeux(const string& nomFichier)
@@ -67,7 +72,6 @@ Liste<Jeu> creerListeJeux(const string& nomFichier)
 	//TODO: Compléter la fonction.
 	Liste<Jeu> listeJeux;
 	for ([[maybe_unused]] int i : iter::range(nElements))
-		lireJeu(f, listeJeux);
-
-	return {};
+		shared_ptr<Jeu>jeu = lireJeu(f, listeJeux);
+	return listeJeux;
 }
