@@ -1,10 +1,10 @@
 #pragma once
-#include "Liste.hpp"
 #include "Concepteur.hpp"
 #include <string>
 #include <memory>
 #include <functional>
-
+#include "Liste.hpp"
+using namespace std;
 class Jeu
 {
 public:
@@ -20,10 +20,13 @@ public:
 	//TODO: Pouvoir accéder à la liste de concepteurs.
 
 	//TODO: Votre méthode pour trouver un concepteur selon un critère donné par une lambda, en utilisant la méthode de Liste.
-
+	function<string(Concepteur)> critereConcepteur = [](Concepteur concepteur) {return concepteur.getNom(); };
+	Concepteur trouverConcepteur(string nom) {
+		concepteurs_.trouverElement<string>(string U)
+	}
 private:
 	std::string titre_;
 	unsigned anneeSortie_;
 	std::string developpeur_;
-	//TODO: Attribut de la liste des concepteurs du jeu
+	Liste<Concepteur> concepteurs_;
 };

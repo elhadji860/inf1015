@@ -3,6 +3,7 @@
 #include <fstream>
 #include "cppitertools/range.hpp"
 #include "Liste.hpp"
+#include "iostream"
 using namespace std;
 
 #pragma region "Fonctions de lecture de base"
@@ -28,11 +29,24 @@ string lireString(istream& fichier)
 	return texte;
 }
 #pragma endregion
+gsl::span<shared_ptr<Jeu>> spanListeJeux(const Liste<Jeu>& liste)
+{
+	return gsl::span(liste.getElements(), liste.getCapacite());
+}
 
 shared_ptr<Concepteur> chercherConcepteur(Liste<Jeu>& listeJeux, string nom)
 {
-	//TODO: Compléter la fonction (équivalent de trouverDesigner du TD2).
-	return {};
+	
+		for (const Jeu* j : spanListeJeux(listeJeux)) {
+			// Normalement on voudrait retourner un pointeur const, mais cela nous
+			// empêcherait d'affecter le pointeur retourné lors de l'appel de cette
+			// fonction.
+			for (shared_ptr<Concepteur> d : spanListeDesigners(j->designers)) {
+				if (d->nom == nom)
+					return d;
+			}
+		}
+		return nullptr;
 }
 
 shared_ptr<Concepteur> lireConcepteur(Liste<Jeu>& lj, istream& f)
@@ -42,8 +56,13 @@ shared_ptr<Concepteur> lireConcepteur(Liste<Jeu>& lj, istream& f)
 	string pays = lireString(f);
 
 	//TODO: Compléter la fonction (équivalent de lireDesigner du TD2).
-	cout << "C: " << nom << endl;  //TODO: Enlever cet affichage temporaire servant à voir que le code fourni lit bien les jeux.
-	return {};
+	shared_ptr<Concepteur> concepteur = make_shared<Concepteur>();
+	concepteur->setNom(nom);
+	concepteur->setAnneeNaissance(anneeNaissance);
+	concepteur->setPays(pays);
+
+	//cout << "C: " << nom << endl;  //TODO: Enlever cet affichage temporaire servant à voir que le code fourni lit bien les jeux.
+	return concepteur;
 }
 
 shared_ptr<Jeu> lireJeu(istream& f, Liste<Jeu>& lj)
@@ -55,7 +74,7 @@ shared_ptr<Jeu> lireJeu(istream& f, Liste<Jeu>& lj)
 	//TODO: Compléter la fonction (équivalent de lireJeu du TD2).
 	for (unsigned int i = 0; i < nConcepteurs; i++)
 		lireConcepteur(lj, f);
-	shared_ptr<Jeu> jeu;
+	shared_ptr<Jeu> jeu = make_shared<Jeu>();
 	jeu->setTitre(titre);
 	jeu->setAnneeSortie(anneeSortie);
 	jeu->setDeveloppeur(developpeur);
