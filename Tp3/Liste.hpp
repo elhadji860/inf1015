@@ -1,78 +1,72 @@
-// Fonctions pour lire le fichier binaire.
-#include "lectureFichierJeux.hpp"
-#include <fstream>
+#pragma once
+#include <iostream>
+#include <memory>
+#include <cassert>
+#include "gsl/span"
 #include "cppitertools/range.hpp"
-#include "Liste.hpp"
 using namespace std;
-
-#pragma region "Fonctions de lecture de base"
-UInt8 lireUint8(istream& fichier)
+template <typename T>
+class Liste
 {
-	UInt8 valeur = 0;
-	fichier.read(reinterpret_cast<char*>(&valeur), sizeof(valeur));
-	return valeur;
-}
+public:
+	//TODO: Constructeurs et surcharges d'opérateurs
+	Liste(int capacite, int nElement, unique_ptr<shared_ptr<T>> elements) : capacite_(1), nElements_(0), elements_(make_unique<shared_ptr<T>>[1]){
+		capacite_ = capacite;
+		nElements_ = nElement;
+		elements_ = elements;
+	}
+	Liste()  {
+		capacite_ = 1;
+		nElements_ = 0;
+		elements_ = move(make_unique<shared_ptr<T>[]>(1));
+	}
 
-UInt16 lireUint16(istream& fichier)
-{
-	UInt16 valeur = 0;
-	fichier.read(reinterpret_cast<char*>(&valeur), sizeof(valeur));
-	return valeur;
-}
+	//TODO: Méthode pour ajouter un élément à la liste
+	void changerTailleListeJeux(unsigned nouvelleCapacite)
+	{
+		assert(nouvelleCapacite >= nElements_); // On ne demande pas de supporter les réductions de nombre d'éléments.
+		unique_ptr<shared_ptr<T>[]> nouvelleListeJeux = make_unique<shared_ptr<T>[]>(nouvelleCapacite);
+		// Pas nécessaire de tester si liste.elements est nullptr puisque si c'est le cas, nElements est nécessairement 0.
+		for (int i : iter::range(nElements_)) 
+			nouvelleListeJeux[i] = elements_[i];
+		
+		
 
-string lireString(istream& fichier)
-{
-	string texte;
-	texte.resize(lireUint16(fichier));
-	fichier.read(reinterpret_cast<char*>(&texte[0]), streamsize(sizeof(texte[0])) * texte.length());
-	return texte;
-}
-#pragma endregion
-
-shared_ptr<Concepteur> chercherConcepteur(Liste<Jeu>& listeJeux, string nom)
-{
-	//TODO: Compléter la fonction (équivalent de trouverDesigner du TD2).
-	return {};
-}
-
-shared_ptr<Concepteur> lireConcepteur(Liste<Jeu>& lj, istream& f)
-{
-	string nom = lireString(f);
-	unsigned anneeNaissance = lireUint16(f);
-	string pays = lireString(f);
-
-	//TODO: Compléter la fonction (équivalent de lireDesigner du TD2).
-	cout << "C: " << nom << endl;  //TODO: Enlever cet affichage temporaire servant à voir que le code fourni lit bien les jeux.
-	return {};
-}
-
-shared_ptr<Jeu> lireJeu(istream& f, Liste<Jeu>& lj)
-{
-	string titre = lireString(f);
-	unsigned anneeSortie = lireUint16(f);
-	string developpeur = lireString(f);
-	unsigned nConcepteurs = lireUint8(f);
-	//TODO: Compléter la fonction (équivalent de lireJeu du TD2).
-	for (unsigned int i = 0; i < nConcepteurs; i++)
-		lireConcepteur(lj, f);
-	shared_ptr<Jeu> jeu;
-	jeu->setTitre(titre);
-	jeu->setAnneeSortie(anneeSortie);
-	jeu->setDeveloppeur(developpeur);
-	lj.ajouterElement(jeu);
-	cout << "J: " << titre << endl;  //TODO: Enlever cet affichage temporaire servant à voir que le code fourni lit bien les jeux.
-	return jeu;
-}
-
-Liste<Jeu> creerListeJeux(const string& nomFichier)
-{
-	ifstream f(nomFichier, ios::binary);
-	f.exceptions(ios::failbit);
-	int nElements = lireUint16(f);
-	//TODO: Compléter la fonction.
-	Liste<Jeu> listeJeux;
-	for ([[maybe_unused]] int i : iter::range(nElements))
-		shared_ptr<Jeu>jeu = lireJeu(f, listeJeux);
-	return listeJeux;
-}
-
+		elements_ = move(nouvelleListeJeux);
+		capacite_ = nouvelleCapacite;
+	}
+	void ajouterElement(shared_ptr<T> element) {
+		if (nElements_ == capacite_)
+			changerTailleListeJeux(max(1U, capacite_ * 2));
+		elements_[nElements_++] = element;
+	}
+	// Pour size, on utilise le même nom que les accesseurs de la bibliothèque standard, qui permet d'utiliser certaines fonctions de la bibliotheque sur cette classe.
+	unsigned size() const { return nElements_; }
+	unsigned getCapacite() const { return capacite_; }
+	std::unique_ptr<std::shared_ptr<T>[]>& getElements{ return elements_;}
+	//TODO: Méthode pour changer la capacité de la liste
+	void changerCapacite(int nouvelleValeur) {
+		capacite_ = nouvelleValeur;
+	}
+	//
+	shared_ptr<T>& operator[](int position) {
+		return elements_[position];
+	};
+	// 
+	//TODO: Méthode pour trouver une élément selon un critère (lambda).
+	template<typename U>
+	T trouverElement(const U critere, function<U(T)> fonction) {
+		int position = 0;
+		for (int i = 0; i < nElements_, ++i) {
+			if (critere = fonction(*elements_[i]) {
+				return elements_[i];
+			}
+		}
+		
+	}
+private:
+	unsigned nElements_;
+	unsigned capacite_;
+	std::unique_ptr<std::shared_ptr<T>[]> elements_;
+	//TODO: Attribut contenant les éléments de la liste.
+};
