@@ -29,24 +29,23 @@ string lireString(istream& fichier)
 	return texte;
 }
 #pragma endregion
-gsl::span<shared_ptr<Jeu>> spanListeJeux(const Liste<Jeu>& liste)
-{
-	return gsl::span(liste.getElements(), liste.getCapacite());
-}
 
-shared_ptr<Concepteur> chercherConcepteur(Liste<Jeu>& listeJeux, string nom)
+
+shared_ptr<Concepteur> chercherConcepteur(Liste<Jeu>& lj, string nom)
 {
-	
-		for (const Jeu* j : spanListeJeux(listeJeux)) {
-			// Normalement on voudrait retourner un pointeur const, mais cela nous
-			// empêcherait d'affecter le pointeur retourné lors de l'appel de cette
-			// fonction.
-			for (shared_ptr<Concepteur> d : spanListeDesigners(j->designers)) {
-				if (d->nom == nom)
-					return d;
+	shared_ptr<Concepteur> ptr_Concepteur = nullptr;
+	if (lj.getNelements() == 0) {
+		return ptr_Concepteur;
+	}
+
+	for (unsigned i = 0; i < lj.getNelements(); ++i) {
+		for (unsigned j = 0; j < (*(*lj[i]).getListe()).getNelements(); ++j) {
+			if ((*lj[i]).trouverConcepteur(nom) != nullptr) {
+				ptr_Concepteur = (*lj[i]).trouverConcepteur(nom);
 			}
 		}
-		return nullptr;
+	}
+	return ptr_Concepteur;
 }
 
 shared_ptr<Concepteur> lireConcepteur(Liste<Jeu>& lj, istream& f)
@@ -65,7 +64,7 @@ shared_ptr<Concepteur> lireConcepteur(Liste<Jeu>& lj, istream& f)
 	return concepteur;
 }
 
-shared_ptr<Jeu> lireJeu(istream& f, Liste<Jeu>& lj)
+void lireJeu(istream& f, Liste<Jeu>& lj)
 {
 	string titre = lireString(f);
 	unsigned anneeSortie = lireUint16(f);
@@ -78,9 +77,8 @@ shared_ptr<Jeu> lireJeu(istream& f, Liste<Jeu>& lj)
 	jeu->setTitre(titre);
 	jeu->setAnneeSortie(anneeSortie);
 	jeu->setDeveloppeur(developpeur);
-	lj.ajouterElement(jeu);
+	lj.ajouterElement(move(jeu));
 	cout << "J: " << titre << endl;  //TODO: Enlever cet affichage temporaire servant à voir que le code fourni lit bien les jeux.
-	return jeu;
 }
 
 Liste<Jeu> creerListeJeux(const string& nomFichier)
@@ -91,6 +89,6 @@ Liste<Jeu> creerListeJeux(const string& nomFichier)
 	//TODO: Compléter la fonction.
 	Liste<Jeu> listeJeux;
 	for ([[maybe_unused]] int i : iter::range(nElements))
-		shared_ptr<Jeu>jeu = lireJeu(f, listeJeux);
+	     lireJeu(f, listeJeux);
 	return listeJeux;
 }

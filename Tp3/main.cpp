@@ -23,14 +23,14 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char** argv)
 	bibliotheque_cours::activerCouleursAnsi();
 #pragma endregion
 
-	Liste<Jeu> lj = creerListeJeux("C:\\Users\\elhad\\Desktop\\inf1015\\Tp3\\jeux.bin");
+	Liste<Jeu> lj = creerListeJeux("C:\\Users\\elhad\\OneDrive\\Attachments\\Bureau\\inf1015\\Tp3\\jeux.bin");
 	static const string ligneSeparation = "\n\033[92m"
 		"══════════════════════════════════════════════════════════════════════════"
 		"\033[0m\n";
 	cout << lj.size() << endl;
 	cout << lj.getCapacite() << endl;
 
-	for (int x = 0; x < lj.size(); ++x) {
+	for (unsigned x = 0; x < lj.size(); ++x) {
 		cout<<(*lj[x]).getDeveloppeur()<<endl;
 	}
 	//TODO: Les l'affichage et l'écriture dans le fichier devraient fonctionner.
