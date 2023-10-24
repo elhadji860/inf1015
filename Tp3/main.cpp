@@ -1,7 +1,7 @@
 ﻿
 /**
-* Programme qui détermine si une année lue du clavier est bissextile.
-* \file   bissextile.cpp
+* Programme qui exploite un fichier de jeux.
+* \file   main.cpp
 * \author Sarr et Diaw
 * \date   7 octobre 2023
 * Créé le 25 octobre 2023
