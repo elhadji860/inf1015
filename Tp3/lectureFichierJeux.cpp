@@ -4,6 +4,7 @@
 #include "cppitertools/range.hpp"
 #include "Liste.hpp"
 #include "iostream"
+#include "Jeu.hpp"
 using namespace std;
 
 #pragma region "Fonctions de lecture de base"
@@ -55,13 +56,11 @@ shared_ptr<Concepteur> lireConcepteur(Liste<Jeu>& lj, istream& f)
 	string pays = lireString(f);
 
 	//TODO: Compléter la fonction (équivalent de lireDesigner du TD2).
-	shared_ptr<Concepteur> concepteur = make_shared<Concepteur>();
-	concepteur->setNom(nom);
-	concepteur->setAnneeNaissance(anneeNaissance);
-	concepteur->setPays(pays);
-
-	//cout << "C: " << nom << endl;  //TODO: Enlever cet affichage temporaire servant à voir que le code fourni lit bien les jeux.
-	return concepteur;
+	shared_ptr<Concepteur> ptrConcepteur = chercherConcepteur(lj, nom);
+	if (ptrConcepteur == nullptr) {
+		ptrConcepteur = make_shared<Concepteur>(Concepteur(nom,anneeNaissance,pays));
+	}
+	return ptrConcepteur;
 }
 
 void lireJeu(istream& f, Liste<Jeu>& lj)
@@ -70,15 +69,15 @@ void lireJeu(istream& f, Liste<Jeu>& lj)
 	unsigned anneeSortie = lireUint16(f);
 	string developpeur = lireString(f);
 	unsigned nConcepteurs = lireUint8(f);
+	
 	//TODO: Compléter la fonction (équivalent de lireJeu du TD2).
+	shared_ptr<Liste<Concepteur>> concepteurs = make_shared<Liste<Concepteur>>();
+	shared_ptr<Jeu> jeu = make_shared<Jeu>(Jeu(nConcepteurs,titre,anneeSortie,developpeur,move(concepteurs)));
+
 	for (unsigned int i = 0; i < nConcepteurs; i++)
-		lireConcepteur(lj, f);
-	shared_ptr<Jeu> jeu = make_shared<Jeu>();
-	jeu->setTitre(titre);
-	jeu->setAnneeSortie(anneeSortie);
-	jeu->setDeveloppeur(developpeur);
+		jeu->getListe()->ajouterElement(lireConcepteur(lj, f));
+	
 	lj.ajouterElement(move(jeu));
-	cout << "J: " << titre << endl;  //TODO: Enlever cet affichage temporaire servant à voir que le code fourni lit bien les jeux.
 }
 
 Liste<Jeu> creerListeJeux(const string& nomFichier)
@@ -88,6 +87,7 @@ Liste<Jeu> creerListeJeux(const string& nomFichier)
 	int nElements = lireUint16(f);
 	//TODO: Compléter la fonction.
 	Liste<Jeu> listeJeux;
+	listeJeux.setNelements(0);
 	for ([[maybe_unused]] int i : iter::range(nElements))
 	     lireJeu(f, listeJeux);
 	return listeJeux;

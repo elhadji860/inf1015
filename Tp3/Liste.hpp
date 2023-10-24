@@ -40,20 +40,27 @@ public:
 			changerTailleListeJeux(max(1U, capacite_ * 2));
 		}
 		elements_[nElements_++] = element;
+		
 	}
 	// Pour size, on utilise le même nom que les accesseurs de la bibliothèque standard, qui permet d'utiliser certaines fonctions de la bibliotheque sur cette classe.
 	unsigned size() const { return nElements_; }
 	unsigned getCapacite() const { return capacite_; }
 	unsigned getNelements() const { return nElements_; }
+	void setNelements(int nouvelleValeur) { nElements_ = nouvelleValeur; }
 	//TODO: Méthode pour changer la capacité de la liste
 	void changerCapacite(int nouvelleValeur) {
 		capacite_ = nouvelleValeur;
 	}
 
 	//surcharge de []
+	shared_ptr<T> operator[](int i) const {
+		return elements_[i];
+	}
+
 	shared_ptr<T> operator[](int i) {
 		return elements_[i];
 	}
+
 	
 	//TODO: Méthode pour trouver une élément selon un critère (lambda).
 	shared_ptr<T> trouverElement(function<bool(shared_ptr<T>)> critere) {
@@ -63,7 +70,6 @@ public:
 			}
 		}
 		return nullptr;
-		
 	}
 private:
 	unsigned nElements_;

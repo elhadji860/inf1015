@@ -22,6 +22,8 @@ public:
 	const std::string& getPays() const    { return pays_; }
 	void setPays(const std::string& pays) { pays_ = pays; }
 
+	//surcharge de <<
+	friend ostream& operator<< (ostream& o, const Concepteur concepteur);
 private:
 	std::string nom_;
 	unsigned anneeNaissance_;

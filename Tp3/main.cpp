@@ -12,6 +12,39 @@ using namespace std;
 
 //TODO: Vos surcharges d'opérateur <<
 
+ostream& operator<<(ostream& o, const Concepteur concepteur) {
+	o << "\t" << concepteur.nom_ << ", " << concepteur.anneeNaissance_ << ", " << concepteur.pays_
+		<< endl;
+	return o;
+}
+
+ostream&  operator<<(ostream& o , const Jeu jeu)
+{
+	o << "Titre : " << "\033[94m" << jeu.titre_ << "\033[0m" << endl;
+	o << "Parution : " << "\033[94m" << jeu.anneeSortie_ << "\033[0m"
+		<< endl;
+	o << "Développeur :  " << "\033[94m" << jeu.developpeur_ << "\033[0m"
+		<< endl;
+	o << "Designers du jeu :" << "\033[94m" << endl;
+	for (int i = 0; i < jeu.nConcepteur_; ++i) {
+		o << *((*jeu.concepteurs_)[i]);
+	}
+	o << "\033[0m";
+	return o;
+}
+
+ostream& operator<< (ostream& o, const Liste<Jeu>& lj) {
+	static const string ligneSeparation = "\n\033[95m"
+		"══════════════════════════════════════════════════════════════════════════"
+		"\033[0m\n";
+	o << ligneSeparation << endl;
+	for (int i = 0; i < lj.getNelements(); ++i)
+	{
+		o << (*lj[i]);
+		o << ligneSeparation << endl;
+	}
+	return o;
+}
 
 
 int main([[maybe_unused]] int argc, [[maybe_unused]] char** argv)
@@ -27,17 +60,19 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char** argv)
 	static const string ligneSeparation = "\n\033[92m"
 		"══════════════════════════════════════════════════════════════════════════"
 		"\033[0m\n";
-	cout << lj.size() << endl;
-	cout << lj.getCapacite() << endl;
 
-	for (unsigned x = 0; x < lj.size(); ++x) {
-		cout<<(*lj[x]).getDeveloppeur()<<endl;
-	}
 	//TODO: Les l'affichage et l'écriture dans le fichier devraient fonctionner.
-	//cout << ligneSeparation << lj;
-	//ofstream("sortie.txt") << lj;
+	cout << ligneSeparation << lj;
+	ofstream("C:\\Users\\elhad\\OneDrive\\Attachments\\Bureau\\inf1015\\tp3\\sortie.txt") << lj;
 
 	//TODO: Compléter le main avec les tests demandés.
+	cout << ligneSeparation << endl;
+	cout << "test de trouverConcepteur" << endl;
+	cout << (*lj[0]).trouverConcepteur("Yoshinori Kitase").get() << endl;
+	cout << (*lj[1]).trouverConcepteur("Yoshinori Kitase").get() << endl;
+	cout << ligneSeparation << endl;
+
+
 	//TODO: S'assurer qu'aucune ligne de code est non couverte.
 	//NOTE: Il n'est pas nécessaire de couvrir les getters/setters simples fournis; il faut tester si vous en ajoutez ou les modifiez.
 	//NOTE: Pour Liste, qui est générique, on demande de couvrir uniquement pour Liste<Jeu>, pas pour tous les types.
