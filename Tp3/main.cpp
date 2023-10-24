@@ -1,4 +1,13 @@
-﻿#include "bibliotheque_cours.hpp"
+﻿
+/**
+* Programme qui détermine si une année lue du clavier est bissextile.
+* \file   bissextile.cpp
+* \author Sarr et Diaw
+* \date   7 octobre 2023
+* Créé le 25 octobre 2023
+*/
+
+#include "bibliotheque_cours.hpp"
 #include "verification_allocation.hpp"
 #include "Liste.hpp"
 #include "Concepteur.hpp"
@@ -8,6 +17,8 @@
 #include <fstream>
 using namespace std;
 
+const string CHEMIN_JEU_BIN = "C:\\Users\\elhad\\Desktop\\inf1015\\Tp3\\jeux.bin";
+const string CHEMIN_SORTIE = "C:\\Users\\elhad\\Desktop\\inf1015\\Tp3\\sortie.txt";
 
 //fonctions utiles
 void separation() {
@@ -63,14 +74,14 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char** argv)
 	bibliotheque_cours::activerCouleursAnsi();
 #pragma endregion
 
-	Liste<Jeu> lj = creerListeJeux("C:\\Users\\elhad\\OneDrive\\Attachments\\Bureau\\inf1015\\Tp3\\jeux.bin");
+	Liste<Jeu> lj = creerListeJeux(CHEMIN_JEU_BIN);
 	static const string ligneSeparation = "\n\033[92m"
 		"══════════════════════════════════════════════════════════════════════════"
 		"\033[0m\n";
 
 	//TODO: Les l'affichage et l'écriture dans le fichier devraient fonctionner.
 	cout << ligneSeparation << "DEBUT" << lj;
-	ofstream("C:\\Users\\elhad\\OneDrive\\Attachments\\Bureau\\inf1015\\tp3\\sortie.txt") << lj;
+	ofstream(CHEMIN_SORTIE) << lj;
 
 	//TODO: Compléter le main avec les tests demandés.
 
