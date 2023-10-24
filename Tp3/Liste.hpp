@@ -10,10 +10,10 @@ class Liste
 {
 public:
 	//TODO: Constructeurs et surcharges d'opérateurs
-	Liste(int capacite, int nElement, unique_ptr<shared_ptr<T>> elements) : capacite_(1), nElements_(0), elements_(make_unique<shared_ptr<T>>[1]){
+	Liste(int capacite, int nElement, std::shared_ptr<std::shared_ptr<T>[]> elements) : capacite_(1), nElements_(0), elements_(make_shared<shared_ptr<T>[]>(1)) {
 		capacite_ = capacite;
 		nElements_ = nElement;
-		elements_ = elements;
+		elements_ = move(elements);
 	}
 	Liste()  {
 		capacite_ = 1;
@@ -47,6 +47,9 @@ public:
 	unsigned getCapacite() const { return capacite_; }
 	unsigned getNelements() const { return nElements_; }
 	void setNelements(int nouvelleValeur) { nElements_ = nouvelleValeur; }
+	shared_ptr<shared_ptr<T>[]> getListe() {
+		return elements_;
+	}
 	//TODO: Méthode pour changer la capacité de la liste
 	void changerCapacite(int nouvelleValeur) {
 		capacite_ = nouvelleValeur;
@@ -54,10 +57,6 @@ public:
 
 	//surcharge de []
 	shared_ptr<T> operator[](int i) const {
-		return elements_[i];
-	}
-
-	shared_ptr<T> operator[](int i) {
 		return elements_[i];
 	}
 
@@ -74,6 +73,6 @@ public:
 private:
 	unsigned nElements_;
 	unsigned capacite_;
-	std::unique_ptr<std::shared_ptr<T>[]> elements_;
+	std::shared_ptr<std::shared_ptr<T>[]> elements_;
 	//TODO: Attribut contenant les éléments de la liste.
 };

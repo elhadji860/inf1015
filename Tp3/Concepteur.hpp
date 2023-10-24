@@ -21,9 +21,21 @@ public:
 	void setAnneeNaissance(int annee)     { anneeNaissance_ = annee; }
 	const std::string& getPays() const    { return pays_; }
 	void setPays(const std::string& pays) { pays_ = pays; }
+	//definition de la copie
+	Concepteur& operator=(const Concepteur&  autre) {
+		if (this != &autre) {
+			nom_ = autre.nom_;
+			anneeNaissance_ = autre.anneeNaissance_;
+			pays_ = autre.pays_;
+		}
+		return *this;
+	}
 
+	Concepteur(const Concepteur& autre) : Concepteur() {
+		*this = autre;
+	}
 	//surcharge de <<
-	friend ostream& operator<< (ostream& o, const Concepteur concepteur);
+	friend ostream& operator<< (ostream& o, const Concepteur& concepteur);
 private:
 	std::string nom_;
 	unsigned anneeNaissance_;
