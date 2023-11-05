@@ -112,11 +112,13 @@ int main()
 	for (const auto& x : heros) {
 		x.changerCouleur(cout, Palettes::PALETTE_4);
 		x.afficher(cout);
+		cout << "\033[36m" << trait << endl;
 	}
 	cout << "\033[0m" << trait << endl;
 	for (const auto& x : vilains) {
 		x.changerCouleur(cout, Palettes::PALETTE_4);
 		x.afficher(cout);
+		cout << "\033[36m" << trait << endl;
 	}
 
 	//ajout dans personnages
@@ -132,6 +134,7 @@ int main()
 	for (auto& x : personnages) {
 		x->changerCouleur(cout, Palettes::PALETTE_2);
 		x->afficher(cout);
+		cout << "\033[36m" << trait << endl;
 	}
 	
 
